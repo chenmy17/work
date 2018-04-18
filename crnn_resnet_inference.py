@@ -96,7 +96,7 @@ def rnn_inference(input_tensor, batch_size, train, regularizer, dataset):
     batch_size = batch_size
     input_size = input_tensor.shape[1]    #每个时刻的输入特征
     timestep_size = batch_size            #时序持续长度为batch，即每做一次预测，需要先输入batch_size行
-    hidden_size = 128                   #每个隐层的节点数目
+    hidden_size = 640                   #每个隐层的节点数目
     layer_num = 2
     if dataset == 'KITTI':
         class_num = 12                    #输出的维度
