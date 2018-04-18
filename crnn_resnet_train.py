@@ -73,14 +73,14 @@ def train(dataset,batch_size):
     #初始化Tensorflow持久化类
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        print('Get pre-trained model......')
-        ckpt = tf.train.get_checkpoint_state(MODEL_SAVE_PATH)
-        if ckpt and ckpt.model_checkpoint_path:
-            saver.restore(sess, ckpt.model_checkpoint_path)
+        #print('Get pre-trained model......')
+        #ckpt = tf.train.get_checkpoint_state(MODEL_SAVE_PATH)
+        #if ckpt and ckpt.model_checkpoint_path:
+        #    saver.restore(sess, ckpt.model_checkpoint_path)
         #sess.run(global_step.initializer)
         
         summary_writer = tf.summary.FileWriter(SUMMARY_DIR, sess.graph)
-        #tf.global_variables_initializer().run()
+        tf.global_variables_initializer().run()
         loss_ = []
         for i in range(TRAINING_STEPS):
             X_mb, Y_mb = get_batch(i)
