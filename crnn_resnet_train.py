@@ -2,10 +2,8 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import h5py
 import numpy as np
-import crnn_inference
 import crnn_resnet_inference
 import sys
-from tensorflow.examples.tutorials.mnist import input_data
 import win_unicode_console
 win_unicode_console.enable()
 
@@ -20,7 +18,7 @@ print(KITTI_POSE_PATH)
 #TUM_IMG_PATH = 'D:/work/dataset/TUM/rgbd_dataset_freiburg2_pioneer_360/128x128_batchs.h5'
 #TUM_POSE_PATH = 'D:/work/dataset/TUM/rgbd_dataset_freiburg2_pioneer_360/gt_sample.h5'
 
-LEARNING_RATE_BASE = 0.1
+LEARNING_RATE_BASE = 0.8
 LEARNING_RATE_DECAY = 0.99
 REGULARAZTION_RATE = 0.001
 TRAINING_STEPS = 3000
@@ -77,7 +75,6 @@ def train(dataset,batch_size):
         #ckpt = tf.train.get_checkpoint_state(MODEL_SAVE_PATH)
         #if ckpt and ckpt.model_checkpoint_path:
         #    saver.restore(sess, ckpt.model_checkpoint_path)
-        #sess.run(global_step.initializer)
         
         summary_writer = tf.summary.FileWriter(SUMMARY_DIR, sess.graph)
         tf.global_variables_initializer().run()
