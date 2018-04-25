@@ -5,6 +5,7 @@ import numpy as np
 import crnn_resnet_inference
 import sys
 import win_unicode_console
+from time import time
 win_unicode_console.enable()
 
 MODEL_SAVE_PATH = sys.path[0] + '/model/'
@@ -21,7 +22,7 @@ print(KITTI_POSE_PATH)
 LEARNING_RATE_BASE = 0.8
 LEARNING_RATE_DECAY = 0.99
 REGULARAZTION_RATE = 0.001
-TRAINING_STEPS = 3000
+TRAINING_STEPS = 100000
 MOVING_AVERAGE_DECAY = 1.0
 DECAY_STEPS = 1500
 
@@ -75,7 +76,7 @@ def train(dataset,batch_size):
         #ckpt = tf.train.get_checkpoint_state(MODEL_SAVE_PATH)
         #if ckpt and ckpt.model_checkpoint_path:
         #    saver.restore(sess, ckpt.model_checkpoint_path)
-        
+        start_time = time()
         summary_writer = tf.summary.FileWriter(SUMMARY_DIR, sess.graph)
         tf.global_variables_initializer().run()
         loss_ = []
@@ -86,12 +87,17 @@ def train(dataset,batch_size):
             summary_writer.add_summary(summary, step)
 
             if i % 100 == 0:
+                remain_time = int((time() - start_time) / (i+1) * (TRAINING_STEPS - i))
                 print("After %d training step(s), loss on training batch is %g " % (step, loss_value))
                 print('Learning rata: ', learning_rate.eval())
+                print("Remain time:\t%dh\t%dm\t%ds" %(remain_time // 3600, remain_time % 3600 // 60, remain_time % 60))
         saver.save(sess, MODEL_SAVE_PATH+KITTI_MODEL_NAME)
         summary_writer.close()
         plt.plot(loss_)
-        plt.show()
+        plt.savefig('loss.png', dpi=1024)
+        loss_file = h5py.File('loss.h5', 'w')
+        loss_file.create_dataset('loss', data=loss_)
+        loss_file.close()
 
 def main(argv=None):
     print('Geting image datasset and pose dataset...')
